@@ -5,7 +5,7 @@
 
 // global veriables
 char *encodeKeys = NULL;
-int encodeDirection = 0; //default
+int encodeDirection = 0; //default: no encoding
 int currentKey = -1;
 
 char encodeChar (char c){
