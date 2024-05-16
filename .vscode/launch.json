@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/encoder",
-            "args": ["+e12345", "123", "456", "789", "-D", "qwerty", "+D", "QWERTY"],
+            "args": ["+e12345"], //"123", "456", "789", "-D", "qwerty", "+D", "QWERTY"
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

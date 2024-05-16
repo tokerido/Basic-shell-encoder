@@ -20,8 +20,8 @@ char encodeChar (char c){
     } else if (c >= 'a' && c <= 'z') {
         c = 'a' + (c - 'a' + encodeDirection * key + NUM_LETTERS) % NUM_LETTERS;
     }
-
-    if (encodeKeys[++currentKey] == '\0')
+    currentKey++;
+    if (encodeKeys[currentKey] == '\0')
     {
         currentKey = 0;
     }
@@ -29,13 +29,12 @@ char encodeChar (char c){
     return c;
 }
 
-void encodeWord(FILE* infile, FILE* outfile,char* word){
-    char c;
-    int i = 0;
-    while ((c = fgetc(infile) != EOF))
+void encodeFile(FILE* infile, FILE* outfile){
+    char input;
+    while ((input = fgetc(infile)) != EOF)
     {
-        fputc(encodeChar(c), outfile);
-    }  
+        fputc(encodeChar(input), outfile);
+    }
 }
 
 int main (int argc, char *argv[]){
@@ -68,7 +67,24 @@ int main (int argc, char *argv[]){
                 encodeKeys = &argv[i][2];
                 encodeDirection = -1;
                 currentKey = 0; 
+            } else if (argv[i][1] == 'I' && argv[i][2] != '\0')
+            {
+                infile = fopen(&argv[i][2], "r");
+                if (infile == NULL)
+                {
+                    fprintf(stderr, "%s\nError: Unable to open input file - ", &argv[i][2]);
+                }
+                return 1;
+            } else if (argv[i][1] == 'O' && argv[i][2] != '\0')
+            {
+                outfile = fopen(&argv[i][2], "w");
+                if (outfile == NULL)
+                {
+                    fprintf(stderr, "%s\nError: Unable to open output file - ", &argv[i][2]);
+                }
+                return 1;
             }
+            
         } else if (argv[i][0] == '+')
         {
             if (argv[i][1] == 'D' && argv[i][2] == '\0')
@@ -80,66 +96,11 @@ int main (int argc, char *argv[]){
                 encodeKeys = &argv[i][2];
                 encodeDirection = 1;
                 currentKey = 0;
-            }
-        } else
-        {
-            encodeWord(infile,outfile,argv[i]);
-        }  
+            } 
+        }
     }
+    encodeFile(infile,outfile);
     fclose(infile);
     fclose(outfile);
     return 1;
-    
-
-//     for (size_t i = 1; i < argc; i++)
-//     {
-//         if (strncmp(argv[i], "+e", 2) == 0)
-//         {
-//             encodeKeys = argv[i] + 2;
-//             encodeDirection = 1;
-//         } else if (strncmp(argv[i], "-e", 2) == 0)
-//         {
-//             encodeKeys = argv[i] + 2;
-//             encodeDirection = -1; 
-//         }
-//     }
-
-//     if (encodeKeys == NULL)
-//     {
-//         keysLength = 0;
-//     } else
-//     {
-//         keysLength = strlen(encodeKeys);
-//     }
-    
-    
-    
-//     fprintf(stderr,"%s\n", "The encode key is:");
-//     fprintf(stderr,"%s\n", encodeKeys);
-//     printf("and we should multyply by: %d\n", encodeDirection);
-    
-//     char c;
-// //    int debugModeChange = 0;
-
-//     while ((c = fgetc(infile)) != EOF) {
-//         if (debugMode) {
-//             fprintf(stderr, "%c", (char)c);
-//         }
-
-//         if (c == '+' && fgetc(infile) == 'D')
-//         {
-//             debugMode = 1;
-//             fprintf(stderr, "%s\n", "Debug mode ON");
-//         } else if (c == '-' && fgetc(infile) == 'D')
-//         {
-//             debugMode = 0;
-//             fprintf(stderr, "%s\n", "Debug mode OFF");
-//         }
-
-//         fputc(encode(c), outfile);
-//     }
-//     fclose(infile);
-//     fclose(outfile);
-//     return 0;
 }
-
