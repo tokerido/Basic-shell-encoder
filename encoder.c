@@ -14,18 +14,17 @@ char encodeChar (char c){
         return c;
     }
     
-    int key = encodeKeys[currentKey] - '0';
+    int offset = encodeKeys[currentKey] - '0';
     if (c >= '0' && c <= '9') {
-        c = '0' + (c - '0' + encodeDirection * key + NUM_DIGITS) % NUM_DIGITS;
+        c = '0' + (c - '0' + encodeDirection * offset + NUM_DIGITS) % NUM_DIGITS;
     } else if (c >= 'a' && c <= 'z') {
-        c = 'a' + (c - 'a' + encodeDirection * key + NUM_LETTERS) % NUM_LETTERS;
+        c = 'a' + (c - 'a' + encodeDirection * offset + NUM_LETTERS) % NUM_LETTERS;
     }
     currentKey++;
     if (encodeKeys[currentKey] == '\0')
     {
         currentKey = 0;
     }
-    
     return c;
 }
 
@@ -38,12 +37,11 @@ void encodeFile(FILE* infile, FILE* outfile){
 }
 
 int main (int argc, char *argv[]){
-    int debugMode = 1; // indicates whether debug mode is on or off (default: ON);
+    int debugMode = 1; // indicates whether debug mode is on or off (default: ON)
     FILE *infile = stdin;
     FILE *outfile = stdout;
-    int noEOFfound = 1;
 
-    for (size_t i = 1; i < argc && noEOFfound; i++)
+    for (size_t i = 1; i < argc; i++)
     {
         if (debugMode == 1)
         {
@@ -73,16 +71,16 @@ int main (int argc, char *argv[]){
                 if (infile == NULL)
                 {
                     fprintf(stderr, "%s\nError: Unable to open input file - ", &argv[i][2]);
+                    return 1;
                 }
-                return 1;
             } else if (argv[i][1] == 'O' && argv[i][2] != '\0')
             {
                 outfile = fopen(&argv[i][2], "w");
                 if (outfile == NULL)
                 {
                     fprintf(stderr, "%s\nError: Unable to open output file - ", &argv[i][2]);
+                    return 1;
                 }
-                return 1;
             }
             
         } else if (argv[i][0] == '+')
@@ -96,7 +94,7 @@ int main (int argc, char *argv[]){
                 encodeKeys = &argv[i][2];
                 encodeDirection = 1;
                 currentKey = 0;
-            } 
+            }
         }
     }
     encodeFile(infile,outfile);
