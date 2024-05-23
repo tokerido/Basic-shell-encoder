@@ -23,7 +23,7 @@ char encodeChar (char c){
     currentKey++;
     if (encodeKeys[currentKey] == '\0')
     {
-        currentKey = 0;
+        currentKey = 0; //go back to start
     }
     return c;
 }
@@ -65,20 +65,20 @@ int main (int argc, char *argv[]){
                 encodeKeys = &argv[i][2];
                 encodeDirection = -1;
                 currentKey = 0; 
-            } else if (argv[i][1] == 'I' && argv[i][2] != '\0')
+            } else if (argv[i][1] == 'I')
             {
                 infile = fopen(&argv[i][2], "r");
                 if (infile == NULL)
                 {
-                    fprintf(stderr, "%s\nError: Unable to open input file - ", &argv[i][2]);
+                    fprintf(stderr, "\nError: Unable to open input file - %s\n", &argv[i][2]);
                     return 1;
                 }
-            } else if (argv[i][1] == 'O' && argv[i][2] != '\0')
+            } else if (argv[i][1] == 'O')
             {
                 outfile = fopen(&argv[i][2], "w");
                 if (outfile == NULL)
                 {
-                    fprintf(stderr, "%s\nError: Unable to open output file - ", &argv[i][2]);
+                    fprintf(stderr, "\nError: Unable to open output file - %s\n", &argv[i][2]);
                     return 1;
                 }
             }
@@ -100,5 +100,5 @@ int main (int argc, char *argv[]){
     encodeFile(infile,outfile);
     fclose(infile);
     fclose(outfile);
-    return 1;
+    return 0;
 }
