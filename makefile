@@ -1,16 +1,4 @@
-#format is target-name: target dependencies 
-
- 
-
-#{-tab-}actions 
-
- # All Targets 
-
 all: encoder 
-
- # Tool invocations 
-
-# Executable "encoder" depends on the file encoder.o 
 
 encoder: encoder.o
 
@@ -20,12 +8,7 @@ encoder.o: encoder.c
 
 	gcc -m32 -g -Wall -c -o encoder.o encoder.c 
 
-
- #tell make that "clean" is not a file name! 
-
 .PHONY: clean 
-
- #Clean the build directory 
 
 clean:
 
